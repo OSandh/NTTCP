@@ -23,35 +23,58 @@ namespace NTTCP
         public List<NTClient> ClientList { get; set; } = new List<NTClient>();
         public int Port { get; set; }
         public bool IsLAN { get; set; }
+        private bool Run { get; set; }
 
         #endregion
 
         public NTServer()
         {
-            IP = IPAddress.Parse("192.168.1.123");
+            IP = GetLocalIP();
             Port = 27015;
         }
 
+        /// <summary>
+        /// Finds and stores the servers local ip-address
+        /// </summary>
+        /// <returns>IPAddress</returns>
         private IPAddress GetLocalIP()
         {
-            return IPAddress.Any;
+            IPAddress ip = null;
+
+            IPHostEntry host;
+            host = Dns.GetHostEntry(Dns.GetHostName());
+
+            foreach (var _ip in host.AddressList)
+            {
+                if (_ip.AddressFamily == AddressFamily.InterNetwork)
+                    ip = _ip;
+            }
+
+            return ip;
         }
 
-        public bool StartServer()
+        public bool Start()
         {
             try
             {
                 ServerThread = new Thread(Listen);
                 ServerThread.Name = "ServerThread";
+                Run = true;
                 ServerThread.Start();
             }
             catch (Exception e)
             {
                 Console.WriteLine("Cannot start Thread: {0}\n{1}", ServerThread.Name, e.Message);
+                Run = false;
                 return false;
             }
 
             return true;
+        }
+
+        public void Stop()
+        {
+            Run = false;
         }
 
         private void Listen()
@@ -61,8 +84,9 @@ namespace NTTCP
                 Listener = new TcpListener(IP, Port);
                 Listener.Start();
 
-                while (true)
+                while (Run)
                 {
+                    Console.SetCursorPosition(0, 0);
                     Console.WriteLine("Waiting for connection...");
 
                     TcpClient tcpC = Listener.AcceptTcpClient();
@@ -70,7 +94,7 @@ namespace NTTCP
                     NTClient client = new NTClient(tcpC);
 
                     ClientList.Add(client);
-
+                    
                     Console.WriteLine("{0} connected!", tcpC.Client.ToString());
 
                     if (ClientList.Count == 2)

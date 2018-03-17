@@ -17,7 +17,7 @@ namespace ClientConsole
 
         public RunClient()
         {
-            Client = new TcpClient("192.168.1.123", 27015);
+            Client = new TcpClient("192.168.1.162", 27015);
             ReadThread = new Thread(Read);
             ReadThread.Name = "ReadThread";
             ReadThread.Start();
