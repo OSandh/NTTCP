@@ -17,7 +17,16 @@ namespace ClientConsole
 
         public RunClient()
         {
-            Client = new TcpClient("192.168.1.162", 27015);
+            try
+            {
+                Client = new TcpClient("192.168.1.162", 27015);
+            }
+            catch (SocketException e)
+            {
+                Console.WriteLine(e.Message);
+                Environment.Exit(1);
+            }
+
             ReadThread = new Thread(Read);
             ReadThread.Name = "ReadThread";
             ReadThread.Start();
