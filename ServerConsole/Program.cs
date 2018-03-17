@@ -41,6 +41,14 @@ namespace ServerConsole
                 "view clients"
         };
 
+        string[] thirdInputs =
+        {
+                "3",
+                "4.",
+                "log",
+                "view log"
+        };
+
         string[] zeroInputs =
         {
                 "0",
@@ -64,15 +72,36 @@ namespace ServerConsole
                 {
                     Name = "WriteThread",
                 };
-
+                
                 ReadThread.Start();
-               // WriteThread.Start();
+                // WriteThread.Start();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
+
             
+        }
+
+        private void PrintMessageLog()
+        {
+            
+            try
+            {
+                ClearMenuSegment();
+                foreach (var s in Server.MessageLog)
+                {
+                    Console.WriteLine(s);
+                }
+            }
+            catch (NullReferenceException )
+            {
+                Console.WriteLine("no messages");
+            }
+
+            Console.WriteLine("\nAny key to go back");
+            Console.ReadLine();
         }
 
         private void Read()
@@ -83,26 +112,77 @@ namespace ServerConsole
                 {
                     Console.SetCursorPosition(0, 5);
                     PrintMenu();
-                    Console.Write("> ");
-
                     HandleInput();
 
-                    Console.WriteLine("\nPress any key to continue");
-                    Console.ReadLine();
-
-                    // clear menu part of console
-                    Console.SetCursorPosition(0, 5);
-                    for (int i = 0; i < 15; i++)
-                    {
-                        Console.Write(new string(' ', Console.WindowWidth));
-                    }
-                    
+                    ClearMenuSegment();
                 }
                 
             }
             catch(Exception e)
             {
                 Console.WriteLine(e.Message);
+            }
+        }
+
+        private void ClearMenuSegment()
+        {
+            int cursorLeft = Console.CursorLeft;
+            int cursorTop = Console.CursorTop;
+
+            // clear menu part of console
+            Console.SetCursorPosition(0, 5);
+
+            int i = 0;
+            while(i < 20)
+            {
+                Console.Write(new string(' ', Console.WindowWidth));
+                Console.SetCursorPosition(0, 5 + i++);
+            }
+            Console.SetCursorPosition(cursorLeft, cursorTop);
+        }
+
+        private void HandleInput()
+        {
+            Console.SetCursorPosition(0, 15);
+            Console.Write("> ");
+
+            string input = Console.ReadLine();
+            input = input.ToLower();
+
+            if (IsValidInput(input, startInputs) && !IsServerOnline)
+            {
+                Start();
+            }
+
+            else if (IsValidInput(input, stopInputs))
+            {
+                Stop();
+            }
+
+            else if (IsValidInput(input, secondInputs))
+            {
+                ViewClients();
+            }
+
+            else if(IsValidInput(input, thirdInputs))
+            {
+                PrintMessageLog();
+            }
+
+            else if (IsValidInput(input, zeroInputs))
+            {
+                Shutdown();
+            }
+
+            else if (input.StartsWith("send "))
+            {
+                Server?.SendMessage(input.Substring(5));
+            }
+
+            else
+            {
+                Console.SetCursorPosition(0, 15);
+                Console.WriteLine("Invalid input");
             }
         }
 
@@ -126,12 +206,17 @@ namespace ServerConsole
 
         private void ViewClients()
         {
-            Console.WriteLine();
+            ClearMenuSegment();
 
+            Console.SetCursorPosition(0, 5);
+            int i = 1;
             foreach(var client in Server.ClientList)
             {
-                Console.WriteLine(client.ToString());
+                Console.WriteLine("{0}. {1}", i++, client.Name);
             }
+
+            Console.WriteLine("\n\nAny key to go back");
+            Console.ReadLine();
         }
 
         private void PrintMenu()
@@ -143,38 +228,9 @@ namespace ServerConsole
 
             Console.WriteLine("\n1. "+ firstItem +"\n" +
                                 "2. View Clients\n" +
+                                "3. View log\n" +
                                 "0. Quit\n" +
                                 "To broadcast message type: send Example Message\n");
-        }
-
-        private void HandleInput()
-        {
-            string input = Console.ReadLine();
-
-            if (IsValidInput(input, startInputs) && !IsServerOnline)
-            {
-                Start();
-            }
-            else if (IsValidInput(input, stopInputs))
-            {
-                Stop();
-            }
-            else if (IsValidInput(input, secondInputs))
-            {
-                ViewClients();
-            }
-            else if (IsValidInput(input, zeroInputs))
-            {
-                Shutdown();
-            }
-            else if (input.StartsWith("send "))
-            {
-                Server?.SendMessage(input.Substring(5));
-            }
-            else
-            {
-                Console.WriteLine("Invalid input");
-            }
         }
 
         public bool Start()
