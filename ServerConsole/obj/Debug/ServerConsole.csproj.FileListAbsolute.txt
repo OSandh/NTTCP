@@ -1,0 +1,10 @@
+C:\Users\NTesla\source\repos\NTTCP\ServerConsole\bin\Debug\ServerConsole.exe.config
+C:\Users\NTesla\source\repos\NTTCP\ServerConsole\bin\Debug\ServerConsole.exe
+C:\Users\NTesla\source\repos\NTTCP\ServerConsole\bin\Debug\ServerConsole.pdb
+C:\Users\NTesla\source\repos\NTTCP\ServerConsole\bin\Debug\NTServer.dll
+C:\Users\NTesla\source\repos\NTTCP\ServerConsole\bin\Debug\NTServer.pdb
+C:\Users\NTesla\source\repos\NTTCP\ServerConsole\obj\Debug\ServerConsole.csprojResolveAssemblyReference.cache
+C:\Users\NTesla\source\repos\NTTCP\ServerConsole\obj\Debug\ServerConsole.csproj.CoreCompileInputs.cache
+C:\Users\NTesla\source\repos\NTTCP\ServerConsole\obj\Debug\ServerConsole.csproj.CopyComplete
+C:\Users\NTesla\source\repos\NTTCP\ServerConsole\obj\Debug\ServerConsole.exe
+C:\Users\NTesla\source\repos\NTTCP\ServerConsole\obj\Debug\ServerConsole.pdb

@@ -1,0 +1,7 @@
+C:\Users\NTesla\source\repos\NTTCP\ClientConsole\bin\Debug\ClientConsole.exe.config
+C:\Users\NTesla\source\repos\NTTCP\ClientConsole\bin\Debug\ClientConsole.exe
+C:\Users\NTesla\source\repos\NTTCP\ClientConsole\bin\Debug\ClientConsole.pdb
+C:\Users\NTesla\source\repos\NTTCP\ClientConsole\obj\Debug\ClientConsole.csprojResolveAssemblyReference.cache
+C:\Users\NTesla\source\repos\NTTCP\ClientConsole\obj\Debug\ClientConsole.csproj.CoreCompileInputs.cache
+C:\Users\NTesla\source\repos\NTTCP\ClientConsole\obj\Debug\ClientConsole.exe
+C:\Users\NTesla\source\repos\NTTCP\ClientConsole\obj\Debug\ClientConsole.pdb
