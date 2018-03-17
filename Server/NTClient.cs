@@ -15,7 +15,7 @@ namespace NTTCP
         #region Properties
         public StreamWriter SWriter { get; set; }
         public StreamReader SReader { get; set; }
-        private Thread ClientReadThread { get; set; }
+        private Thread ClientThread { get; set; }
         public TcpClient Connection { get; set; }
         public NTClient Partner { get; set; }
         #endregion 
@@ -23,9 +23,13 @@ namespace NTTCP
         public NTClient(TcpClient client)
         {
             Connection = client;
-            ClientReadThread = new Thread(ReadClient);
-            ClientReadThread.Name = "ClientThread";
-            ClientReadThread.Start();
+
+            ClientThread = new Thread(ReadClient)
+            {
+                Name = "ClientThread",
+                IsBackground = true
+            };
+            ClientThread.Start();
         }
 
         private void ReadClient()
