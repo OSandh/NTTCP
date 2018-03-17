@@ -13,6 +13,8 @@ namespace NTTCP
     public class NTClient
     {
         #region Properties
+        private NTServer Server { get; set; }
+        public string Name { get; set; }
         public StreamWriter SWriter { get; set; }
         public StreamReader SReader { get; set; }
         private Thread ClientThread { get; set; }
@@ -20,9 +22,13 @@ namespace NTTCP
         public NTClient Partner { get; set; }
         #endregion 
 
-        public NTClient(TcpClient client)
+        public NTClient(NTServer server, TcpClient client)
         {
+            Server = server;
+
             Connection = client;
+
+            Name = Connection.Client.RemoteEndPoint.ToString();
 
             ClientThread = new Thread(ReadClient)
             {
@@ -44,6 +50,9 @@ namespace NTTCP
                 while (true)
                 {
                     msg = SReader.ReadLine();
+
+                    Server.LastClientMessage = msg;
+                    Server.MessageLog.Enqueue(Name + ": " + msg);
 
                     Partner?.SWriter.WriteLine(msg);
                     Partner?.SWriter.Flush();

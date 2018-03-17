@@ -24,6 +24,8 @@ namespace NTTCP
         public int Port { get; set; }
         public bool IsLAN { get; set; }
         private bool Run { get; set; }
+        public string LastClientMessage { get; set; }
+        public Queue<string> MessageLog { get; set; } = new Queue<string>(10);
 
         #endregion
 
@@ -74,6 +76,7 @@ namespace NTTCP
 
         public void Stop()
         {
+            Listener?.Stop();
             Run = false;
         }
 
@@ -86,16 +89,29 @@ namespace NTTCP
 
                 while (Run)
                 {
+                    // get current curson pos
+                    int cursorTop = Console.CursorTop;
+                    int cursorLeft = Console.CursorLeft;
+
                     Console.SetCursorPosition(0, 0);
                     Console.WriteLine("Waiting for connection...");
 
+                    // reset curson pos
+                    Console.SetCursorPosition(cursorLeft, cursorTop);
+
+
                     TcpClient tcpC = Listener.AcceptTcpClient();
 
-                    NTClient client = new NTClient(tcpC);
+                    NTClient client = new NTClient(this, tcpC);
 
                     ClientList.Add(client);
                     
+
+                    Console.SetCursorPosition(0, 1);
                     Console.WriteLine("{0} connected!", tcpC.Client.ToString());
+
+                    // reset curson pos
+                    Console.SetCursorPosition(cursorLeft, cursorTop);
 
                     if (ClientList.Count == 2)
                         PairClients();
@@ -134,6 +150,7 @@ namespace NTTCP
             {
                 client.SendMessage(input);
             }
+            MessageLog.Enqueue("Server: " + input);
         }
     }
 }
