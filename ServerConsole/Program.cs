@@ -84,33 +84,9 @@ namespace ServerConsole
                     Console.SetCursorPosition(0, 5);
                     PrintMenu();
                     Console.Write("> ");
-                    string input = Console.ReadLine();
 
-                    if (IsValidInput(input, startInputs) && !IsServerOnline)
-                    {
-                        Start();
-                    }
-                    else if(IsValidInput(input, stopInputs))
-                    {
-                        Stop();
-                    }
-                    else if(IsValidInput(input, secondInputs))
-                    {
-                        ViewClients();
-                    }
-                    else if(IsValidInput(input, zeroInputs))
-                    {
-                        Shutdown();
-                    }
-                    else if(input.StartsWith("send "))
-                    {
-                        Server?.SendMessage(input.Substring(5));
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid input");
-                    }
-                    
+                    HandleInput();
+
                     Console.WriteLine("\nPress any key to continue");
                     Console.ReadLine();
 
@@ -169,6 +145,36 @@ namespace ServerConsole
                                 "2. View Clients\n" +
                                 "0. Quit\n" +
                                 "To broadcast message type: send Example Message\n");
+        }
+
+        private void HandleInput()
+        {
+            string input = Console.ReadLine();
+
+            if (IsValidInput(input, startInputs) && !IsServerOnline)
+            {
+                Start();
+            }
+            else if (IsValidInput(input, stopInputs))
+            {
+                Stop();
+            }
+            else if (IsValidInput(input, secondInputs))
+            {
+                ViewClients();
+            }
+            else if (IsValidInput(input, zeroInputs))
+            {
+                Shutdown();
+            }
+            else if (input.StartsWith("send "))
+            {
+                Server?.SendMessage(input.Substring(5));
+            }
+            else
+            {
+                Console.WriteLine("Invalid input");
+            }
         }
 
         public bool Start()

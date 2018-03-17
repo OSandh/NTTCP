@@ -1,5 +1,0 @@
-C:\Users\NTesla\source\repos\NTTCP\Server\bin\Debug\NTServer.dll
-C:\Users\NTesla\source\repos\NTTCP\Server\bin\Debug\NTServer.pdb
-C:\Users\NTesla\source\repos\NTTCP\Server\obj\Debug\NTServer.csproj.CoreCompileInputs.cache
-C:\Users\NTesla\source\repos\NTTCP\Server\obj\Debug\NTServer.dll
-C:\Users\NTesla\source\repos\NTTCP\Server\obj\Debug\NTServer.pdb
