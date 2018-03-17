@@ -1,13 +1,15 @@
 
 *.ide-shm
 *.ide-wal
-.vs/NTTCP/v15/.suo
-.vs/NTTCP/v15/.suo
-.vs/NTTCP/v15/Server/sqlite3/storage.ide
+.vs/
 *.cache
 *.ide
-Server/bin/Debug/NTServer.dll
-Server/bin/Debug/NTServer.pdb
+Server/bin/
+Server/obj/
+ClientConsole/bin/
+ClientConsole/obj/
+ServerConsole/bin/
+ServerConsole/obj/
 *.exe
 *.pdb
 *.txt
