@@ -4,8 +4,8 @@
 .vs/
 *.cache
 *.ide
-Server/bin/
-Server/obj/
+NTServer/bin/
+NTServer/obj/
 ClientConsole/bin/
 ClientConsole/obj/
 ServerConsole/bin/
