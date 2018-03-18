@@ -29,13 +29,14 @@ namespace NTTCP
         public NTClient Partner { get; set; }
         #endregion 
 
-        public NTClient(NTServer server, TcpClient client)
+        public NTClient(NTServer server, TcpClient client, User user)
         {
             Server = server;
 
             Connection = client;
 
-            Name = Connection.Client.RemoteEndPoint.ToString();
+            User = user;
+            Name = User.Name + ", " + User.Age;
 
             ClientThread = new Thread(ReadClient)
             {
@@ -51,13 +52,34 @@ namespace NTTCP
             {
                 SWriter = new StreamWriter(Connection.GetStream());
                 SReader = new StreamReader(Connection.GetStream());
-                
-                
-                xReader = XmlReader.Create(Connection.GetStream());
-                XmlSerializer xSerializer = new XmlSerializer(typeof(User));
-                User = (User) xSerializer.Deserialize(xReader);
 
-                Name = User.Name + ", " + User.Age;
+                //int userByteSize = int.Parse(SReader.ReadLine());
+
+                //BinaryReader bReader;
+
+                //bReader = new BinaryReader(Connection.GetStream());
+
+                //byte[] userBytes = bReader.ReadBytes(userByteSize);
+
+                //using (var mStream = new MemoryStream())
+                //{
+                //    var bFormatter = new BinaryFormatter();
+                //    mStream.Write(userBytes, 0, userBytes.Length);
+                //    mStream.Seek(0, SeekOrigin.Begin);
+                //    User = (User) bFormatter.Deserialize(mStream);
+                    
+                //}
+                
+                //string userXml = SReader.ReadLine();
+
+
+                ////var xWriter = XmlWriter.Create()
+
+                ////xReader = XmlReader.Create(Connection.GetStream());
+                //Serializer xSerializer = new Serializer();
+                //////xReader.Read();
+                //User = xSerializer.Deserialize<User>(userXml);
+
 
                 string msg = "";
 
@@ -68,7 +90,7 @@ namespace NTTCP
                     Server.LastClientMessage = msg;
                     Server.MessageLog.Enqueue(Name + ": " + msg);
 
-                    Partner?.SWriter.WriteLine(msg);
+                    Partner?.SWriter.WriteLine("{0}: {1}", User.ToString(), msg);
                     Partner?.SWriter.Flush();
                 }
             }

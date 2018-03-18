@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,7 +53,7 @@ namespace NTTCP
                 {
                     msg = sReader.ReadLine();
 
-                    Console.WriteLine("Incoming msg: {0}", msg);
+                    Console.WriteLine("{0}", msg);
                 }
             }
             catch (Exception e)
@@ -70,19 +71,18 @@ namespace NTTCP
         {
             try
             {
-                StreamWriter sWriter = new StreamWriter(Client.GetStream());
-                XmlWriter xWriter = XmlWriter.Create(Client.GetStream());
-
-                string msg;
-
                 User = GetUserInfo();
 
-                XmlSerializer xSerializer = new XmlSerializer(typeof(User));
-                xSerializer.Serialize(xWriter, User);
+                SendUserData(User);
                 
+                StreamWriter sWriter;
+
+                sWriter = new StreamWriter(Client.GetStream());
+                
+                string msg;
+
                 while (true)
                 {
-                    Console.WriteLine("Send Message\n>");
                     msg = Console.ReadLine();
                     sWriter.WriteLine(msg);
                     sWriter.Flush();
@@ -100,11 +100,34 @@ namespace NTTCP
             }
         }
 
+        private void SendUserData(User user)
+        {
+            byte[] userBytes;
+
+            var bFormatter = new BinaryFormatter();
+
+            using (var mStream = new MemoryStream())
+            {
+                bFormatter.Serialize(mStream, User);
+                userBytes = mStream.ToArray();
+            }
+
+            BinaryWriter bWriter;
+
+            bWriter = new BinaryWriter(Client.GetStream());
+
+            Int32 userBytesLength = userBytes.Length;
+
+            bWriter.Write(userBytesLength);
+            bWriter.Write(userBytes);
+            bWriter.Flush();
+        }
+
         private User GetUserInfo()
         {
+            
             Console.WriteLine("Enter username\n");
             Console.Write('>');
-
             string name = Console.ReadLine();
 
             int age;

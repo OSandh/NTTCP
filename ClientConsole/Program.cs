@@ -14,7 +14,8 @@ namespace NTTCP
         static void Main(string[] args)
         {
             ClientConsole run = new ClientConsole();
-            
+
+           
         }
 
         

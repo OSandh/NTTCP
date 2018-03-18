@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -99,22 +101,32 @@ namespace NTTCP
                     // reset curson pos
                     Console.SetCursorPosition(cursorLeft, cursorTop);
 
-
                     TcpClient tcpC = Listener.AcceptTcpClient();
 
-                    NTClient client = new NTClient(this, tcpC);
+                    User user = RecieveUserData(tcpC.GetStream());
 
-                    ClientList.Add(client);
-                    
+                    if(user != null)
+                    {
+                        NTClient client = new NTClient(this, tcpC, user);
 
-                    Console.SetCursorPosition(0, 1);
-                    Console.WriteLine("{0} connected!", tcpC.Client.ToString());
+                        ClientList.Add(client);
 
-                    // reset curson pos
-                    Console.SetCursorPosition(cursorLeft, cursorTop);
+                        Console.SetCursorPosition(0, 1);
+                        Console.WriteLine("{0} connected!", tcpC.Client.ToString());
 
-                    if (ClientList.Count == 2)
-                        PairClients();
+                        // reset curson pos
+                        Console.SetCursorPosition(cursorLeft, cursorTop);
+
+                        if (ClientList.Count == 2)
+                            PairClients();
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(0, 1);
+                        Console.WriteLine("Client rejected. Could not resolve client user data...");
+                        Console.SetCursorPosition(cursorLeft, cursorTop);
+                        tcpC?.Close();
+                    }
                 }
                 
             }
@@ -129,6 +141,27 @@ namespace NTTCP
                 ServerThread.Abort();
             }
         }
+
+        private User RecieveUserData(NetworkStream clientStream)
+        {
+            BinaryReader bReader;
+
+            bReader = new BinaryReader(clientStream);
+
+            // read size of byte incoming byte stream
+            int userByteSize = bReader.ReadInt32();
+
+            byte[] userBytes = bReader.ReadBytes(userByteSize);
+
+            using (var mStream = new MemoryStream())
+            {
+                var bFormatter = new BinaryFormatter();
+                mStream.Write(userBytes, 0, userBytes.Length);
+                mStream.Seek(0, SeekOrigin.Begin);
+                return (User)bFormatter.Deserialize(mStream);
+            }
+        }
+
 
         private void PairClients()
         {
@@ -148,7 +181,7 @@ namespace NTTCP
         {
             foreach(var client in ClientList)
             {
-                client.SendMessage(input);
+                client.SendMessage("Server: " + input);
             }
             MessageLog.Enqueue("Server: " + input);
         }
