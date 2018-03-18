@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NTTCP
 {
-    [Serializable]
+    [Serializable()]
     public class User
     {
         public string Name { get; set; }
@@ -14,6 +14,8 @@ namespace NTTCP
 
         public User()
         {
+            Name = "";
+            Age = -1;
         }
 
         public User(string name, int age)
