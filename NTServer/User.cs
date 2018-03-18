@@ -12,6 +12,12 @@ namespace NTTCP
         public string Name { get; set; }
         public int Age { get; set; }
 
+        public User()
+        {
+            Name = "";
+            Age = -1;
+        }
+
         public User(string name, int age)
         {
             Name = name;

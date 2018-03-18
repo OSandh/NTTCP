@@ -49,7 +49,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Server\NTServer.csproj">
+    <ProjectReference Include="..\NTServer\NTServer.csproj">
       <Project>{26218c43-f29a-4e39-8ed0-00a231b28dea}</Project>
       <Name>NTServer</Name>
     </ProjectReference>
