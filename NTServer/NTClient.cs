@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace NTTCP
         public string Name { get; set; }
         public StreamWriter SWriter { get; set; }
         public StreamReader SReader { get; set; }
+        public BinaryReader BinaryReader { get; private set; }
         public XmlReader xReader { get; set; }
         private Thread ClientThread { get; set; }
         public TcpClient Connection { get; set; }
@@ -49,7 +51,8 @@ namespace NTTCP
             {
                 SWriter = new StreamWriter(Connection.GetStream());
                 SReader = new StreamReader(Connection.GetStream());
-
+                
+                
                 xReader = XmlReader.Create(Connection.GetStream());
                 XmlSerializer xSerializer = new XmlSerializer(typeof(User));
                 User = (User) xSerializer.Deserialize(xReader);

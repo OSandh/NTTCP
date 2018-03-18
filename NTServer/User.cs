@@ -14,8 +14,6 @@ namespace NTTCP
 
         public User()
         {
-            Name = "";
-            Age = -1;
         }
 
         public User(string name, int age)
