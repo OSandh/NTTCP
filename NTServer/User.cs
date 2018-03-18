@@ -13,9 +13,8 @@ namespace NTTCP
         public int Age { get; set; }
 
         public User()
+            : this("", -1)
         {
-            Name = "";
-            Age = -1;
         }
 
         public User(string name, int age)
