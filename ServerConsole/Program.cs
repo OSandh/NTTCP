@@ -8,7 +8,6 @@ using NTTCP;
 
 namespace NTTCP
 {
-
     class ServerConsole
     {
         public NTServer Server { get; set; }

@@ -7,6 +7,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
+
 
 namespace NTTCP
 {
@@ -17,6 +20,7 @@ namespace NTTCP
         public string Name { get; set; }
         public StreamWriter SWriter { get; set; }
         public StreamReader SReader { get; set; }
+        public XmlReader xReader { get; set; }
         private Thread ClientThread { get; set; }
         public TcpClient Connection { get; set; }
         public NTClient Partner { get; set; }
@@ -44,6 +48,9 @@ namespace NTTCP
             {
                 SWriter = new StreamWriter(Connection.GetStream());
                 SReader = new StreamReader(Connection.GetStream());
+
+                xReader = XmlReader.Create(Connection.GetStream());
+                XmlSerializer xSerializer = new XmlSerializer(typof(User))
 
                 string msg = "";
 

@@ -43,6 +43,7 @@
     <Compile Include="NTClient.cs" />
     <Compile Include="NTServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="User.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
