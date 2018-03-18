@@ -16,6 +16,7 @@ namespace NTTCP
     public class NTClient
     {
         #region Properties
+        public User User { get; set; }
         private NTServer Server { get; set; }
         public string Name { get; set; }
         public StreamWriter SWriter { get; set; }
@@ -50,7 +51,10 @@ namespace NTTCP
                 SReader = new StreamReader(Connection.GetStream());
 
                 xReader = XmlReader.Create(Connection.GetStream());
-                XmlSerializer xSerializer = new XmlSerializer(typof(User))
+                XmlSerializer xSerializer = new XmlSerializer(typeof(User));
+                User = (User) xSerializer.Deserialize(xReader);
+
+                Name = User.Name + ", " + User.Age;
 
                 string msg = "";
 

@@ -13,7 +13,7 @@ namespace NTTCP
 {
     class ClientConsole
     {
-        User user;
+        User User { get; set; }
         private TcpClient Client { get; set; }
         private Thread ReadThread { get; set; }
         private Thread WriteThread { get; set; }
@@ -75,10 +75,10 @@ namespace NTTCP
 
                 string msg;
 
-                user = GetUserInfo();
+                User = GetUserInfo();
 
                 XmlSerializer xSerializer = new XmlSerializer(typeof(User));
-                xSerializer.Serialize(xWriter, user);
+                xSerializer.Serialize(xWriter, User);
                 
                 while (true)
                 {
